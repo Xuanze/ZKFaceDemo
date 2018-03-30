@@ -78,7 +78,6 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
     private Camera.Size previewSize;
     private int x, y;
 
-
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_rz);
