@@ -313,7 +313,6 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
         handler.postDelayed(runnable03, 1000);
         btn_photo.setEnabled(false);
         isRzSucceed = true;
-
     }
 
     private void isZwYz() {
