@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical">
+
+    <include layout="@layout/pad_view_rz_title" />
+
+    <LinearLayout
+        android:id="@id/ll_rz"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="1.0dip"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:background="#8cd8d8d8"
+            android:orientation="horizontal" />
+
+        <include
+            layout="@layout/pad_view_rz_menu"
+            android:layout_width="0.0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@color/auth_menu_bg" />
+
+        <include
+            android:id="@id/include_idcard"
+            layout="@layout/pad_activity_cj_idcard"
+            android:layout_width="0.0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="3.0"
+            android:background="@drawable/img_module_tab_auth_queryflow_bg"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:id="@id/layout_view_face"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="3.0"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <include
+                layout="@layout/pad_view_rz_ksinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/img_module_tab_auth_queryflow_bg" />
+
+            <include
+                layout="@layout/pad_view_rz_face"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/img_module_tab_auth_queryflow_bg" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
