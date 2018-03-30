@@ -117,12 +117,9 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
         MyApplication.getApplication().setShouldStopUploadingData(false);
         include_idcard.setVisibility(View.VISIBLE);
         layout_view_face.setVisibility(View.GONE);
-
-
         _surfaceHolder = surfaceView.getHolder();
         _surfaceHolder.addCallback(this);
         _surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
         ccno = DbServices.getInstance(getBaseContext()).selectCC().get(0).getCc_no();
         ccmc = DbServices.getInstance(getBaseContext()).selectCC().get(0).getCc_name();
         kcmc = DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_name();
