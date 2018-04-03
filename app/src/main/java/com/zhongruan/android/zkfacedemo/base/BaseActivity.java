@@ -21,6 +21,7 @@ import com.zhongruan.android.zkfacedemo.dialog.HintDialog;
 import com.zhongruan.android.zkfacedemo.idcardengine.IDCardData;
 import com.zhongruan.android.zkfacedemo.utils.CommonUtil;
 import com.zhongruan.android.zkfacedemo.utils.LogUtil;
+import com.zhongruan.android.zkfacedemo.utils.NetUtil;
 import com.zkteco.android.biometric.ZKLiveFaceService;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
 import com.zkteco.android.biometric.core.device.TransportType;
@@ -162,8 +163,8 @@ public abstract class BaseActivity extends FragmentActivity {
             progressDialog.setCancelable(cancelable);//能否够被取消
             progressDialog.setMessage(message);//载入显示的信息
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);//圆环风格
-            progressDialog.show();
         }
+        progressDialog.show();
         this.message = message;
         mHandler.sendEmptyMessageDelayed(2, time);
         progressDialog.setMessage(message);//载入显示的信息

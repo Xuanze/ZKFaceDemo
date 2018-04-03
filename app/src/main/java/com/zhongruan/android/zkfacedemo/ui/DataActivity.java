@@ -279,8 +279,6 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                                 hint = "U盘根目录不存在ZIP包";
                                 LogUtil.i("U盘根目录不存在ZIP包");
                             } else if (tempList == null || BuildConfig.VERSION_NAME.equals(tempList.get(2)) || BuildConfig.VERSION_NAME.equals(tempList.get(3)) || tempList.size() <= 4) {
-
-
                                 copyFile();
                                 LogUtil.i("U盘根目录只存在一个ZIP包");
                             } else {

@@ -19,6 +19,8 @@ public class Utils {
     public static final int LEFT_FINGER_LITTLE = 0;
     public static final int LEFT_FINGER_MIDDLE = 2;
     public static final int LEFT_FINGER_THUMB = 4;
+    public static final int RIGHT_FINGER_THUMB = 5;
+
     final List<String> list;
 
     public Utils(List<String> list) {
@@ -37,10 +39,19 @@ public class Utils {
                     break;
                 }
                 break;
+//            case 32032223:
+//                if (str.equals(DEVICETYPE_YLT2)) {
+//                    obj = RIGHT_FINGER_THUMB;
+//                    break;
+//                }
+//                break;
         }
         switch (obj) {
             case LEFT_FINGER_FOURTH:
                 return "/storage/usbhost1/";
+
+            case RIGHT_FINGER_THUMB:
+                return "/mnt/usb_storage/USB_DISK0/";
             default:
                 return null;
         }
