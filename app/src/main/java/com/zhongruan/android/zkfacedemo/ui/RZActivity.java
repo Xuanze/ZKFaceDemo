@@ -409,8 +409,6 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
             if (fileOpiton) {
                 fileOpiton = false;
                 if (null != data) {
-                    //camera.setOneShotPreviewCallback(null);
-                    //处理data
                     contrastOption = false;
                     Camera.Size previewSize = camera.getParameters().getPreviewSize();//获取尺寸,格式转换的时候要用到
                     BitmapFactory.Options newOpts = new BitmapFactory.Options();
@@ -472,6 +470,7 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                                 CS = 0;
                                 contrastOption = true;
                                 mKsResult.setText("人脸比对中");
+                                mKsResult.setTextColor(getResources().getColor(R.color.red));
                                 dialog.dismiss();
                             }
                         }
