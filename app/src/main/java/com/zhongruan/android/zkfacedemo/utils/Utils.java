@@ -39,19 +39,18 @@ public class Utils {
                     break;
                 }
                 break;
-//            case 32032223:
-//                if (str.equals(DEVICETYPE_YLT2)) {
-//                    obj = RIGHT_FINGER_THUMB;
-//                    break;
-//                }
-//                break;
+            case 32032223:
+                if (str.equals(DEVICETYPE_YLT2)) {
+                    obj = RIGHT_FINGER_THUMB;
+                    break;
+                }
+                break;
         }
         switch (obj) {
             case LEFT_FINGER_FOURTH:
                 return "/storage/usbhost1/";
-
             case RIGHT_FINGER_THUMB:
-                return "/mnt/usb_storage/USB_DISK0/";
+                return "/mnt/usb_storage/USB_DISK0/udisk0/";
             default:
                 return null;
         }
