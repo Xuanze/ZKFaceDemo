@@ -713,7 +713,6 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
-
     /**
      * 读取bk_ks.txt内容
      */
@@ -796,8 +795,6 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                     Message message12 = new Message();
                     message12.what = 15;
                     handler.sendMessage(message12);
-
-
                     if (ksKcList.size() > 0) {
                         multiProgressDialog.dismiss();
                         select_kc_rl.setVisibility(View.VISIBLE);

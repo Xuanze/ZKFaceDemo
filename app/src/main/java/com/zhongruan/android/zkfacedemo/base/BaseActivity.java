@@ -21,7 +21,6 @@ import com.zhongruan.android.zkfacedemo.dialog.HintDialog;
 import com.zhongruan.android.zkfacedemo.idcardengine.IDCardData;
 import com.zhongruan.android.zkfacedemo.utils.CommonUtil;
 import com.zhongruan.android.zkfacedemo.utils.LogUtil;
-import com.zhongruan.android.zkfacedemo.utils.NetUtil;
 import com.zkteco.android.biometric.ZKLiveFaceService;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
 import com.zkteco.android.biometric.core.device.TransportType;
@@ -52,7 +51,6 @@ public abstract class BaseActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         baseReceiver = new BaseReceiver();
@@ -193,7 +191,6 @@ public abstract class BaseActivity extends FragmentActivity {
         }
     }
 
-
     public void startIDCardReader() {
         LogHelper.setLevel(7);
         Map idrparams = new HashMap();
@@ -256,7 +253,6 @@ public abstract class BaseActivity extends FragmentActivity {
             }
         });
     }
-
 
     public void setParameter() {
         File file = new File(Environment.getExternalStorageDirectory(), "zkliveface.lic");
