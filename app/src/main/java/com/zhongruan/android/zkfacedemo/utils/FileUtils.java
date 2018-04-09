@@ -66,7 +66,6 @@ public class FileUtils {
         byte[] buf = new byte[1024 * 1024];// 1M
         Bitmap bitmap = null;
         try {
-
             FileInputStream fis = new FileInputStream(path);
             int len = fis.read(buf, 0, buf.length);
             bitmap = BitmapFactory.decodeByteArray(buf, 0, len);
