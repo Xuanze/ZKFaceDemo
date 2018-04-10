@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -264,6 +265,7 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                     @Override
                     public void onClick(Dialog dialog, boolean confirm) {
                         if (confirm) {
+                            delFolder("DataTemp");
                             dialog.dismiss();
                             initMap();
                             isError = false;
@@ -558,7 +560,6 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                     public void editInputFinished(Dialog dialog, String password, boolean confirm) {
                         if (confirm) {
                             dialog.dismiss();
-//                            initProgressDialog();
                             multiProgressDialog.show();
                             Message message3 = new Message();
                             message3.what = 1;
@@ -568,7 +569,7 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                             dialog.dismiss();
                         }
                     }
-                }).setTitle("请输入解压密码").setHint("请输入解压密码").show();
+                }).setTitle("请输入解压密码").setHint("请输入解压密码").setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD).show();
             } else {
                 unZipFile(NewPith + NewFile, NewPith + NewFilePath, pwd);
             }

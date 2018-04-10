@@ -12,6 +12,7 @@ import android.hardware.Camera;
 import android.media.ThumbnailUtils;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -187,7 +188,7 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                             handler.postDelayed(runnable02, 100);
                         }
                     }
-                }).setTitle("请输入身份证号").show();
+                }).setTitle("请输入身份证号").setInputType(InputType.TYPE_CLASS_NUMBER).show();
                 break;
         }
     }
@@ -468,6 +469,7 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                                 dialog.dismiss();
                             } else {
                                 CS = 0;
+                                btn_photo.setEnabled(false);
                                 contrastOption = true;
                                 mKsResult.setText("人脸比对中");
                                 mKsResult.setTextColor(getResources().getColor(R.color.red));

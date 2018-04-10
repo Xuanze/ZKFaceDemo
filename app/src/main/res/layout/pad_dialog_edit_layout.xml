@@ -34,8 +34,8 @@
             android:background="#ffe0e0e1"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingBottom="0.0dip"
-            android:paddingTop="0.0dip">
+            android:paddingTop="0.0dip"
+            android:paddingBottom="0.0dip">
 
             <ImageView
                 android:id="@id/iv_edit_Tip"
@@ -51,8 +51,8 @@
                 android:layout_width="590.3828dip"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:minHeight="124.04999dip"
                 android:minWidth="590.3828dip"
+                android:minHeight="124.04999dip"
                 android:orientation="vertical">
 
                 <EditText
@@ -62,14 +62,15 @@
                     android:layout_marginLeft="20.0dip"
                     android:layout_marginRight="10.0dip"
                     android:background="@drawable/shape_ip_edittext_bg"
+                    android:digits="0123456789abcdefghijklmnopqrstuvwxyz"
                     android:hint="请输入18位身份证号码"
-                    android:inputType="number"
-                    android:digits="0123456789xyzXYZ"
                     android:imeOptions="actionDone"
+                    android:inputType="textPassword"
                     android:maxLength="18"
                     android:padding="15.0dip"
                     android:textSize="25.0dip" />
             </LinearLayout>
+
             <ImageView
                 android:layout_width="83.32999dip"
                 android:layout_height="83.32999dip"
