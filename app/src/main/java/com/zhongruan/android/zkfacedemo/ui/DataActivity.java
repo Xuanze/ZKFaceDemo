@@ -689,7 +689,6 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                     Message message10 = new Message();
                     message10.what = mag + 1;
                     handler.sendMessage(message10);
-
                     if (isUSB) {
                         ConfigApplication.getApplication().setUsbImportTime(DateUtil.getNowTime());
                         ConfigApplication.getApplication().setNetImportTime("");

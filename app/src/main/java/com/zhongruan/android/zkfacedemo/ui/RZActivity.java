@@ -170,7 +170,7 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                             dialog.dismiss();
                             IDCard idCard = new IDCard();
                             if (idCard.validate_effective(password) == password) {
-                                bkKs = DbServices.getInstance(getBaseContext()).selectBKKS(ccno, password);
+                                bkKs = DbServices.getInstance(getBaseContext()).selectBKKS(kcmc, ccno, password);
                                 if (bkKs != null) {
                                     bit = FileUtils.getBitmapFromPath(FileUtils.getAppSavePath() + "/" + bkKs.getKs_xp());
                                     register_bitmap(bit);
@@ -208,7 +208,7 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
             bit = null;
             if (idCardData != null) {
                 playBeep();
-                bkKs = DbServices.getInstance(getBaseContext()).selectBKKS(ccno, idCardData.getSfzh());
+                bkKs = DbServices.getInstance(getBaseContext()).selectBKKS(kcmc, ccno, idCardData.getSfzh());
                 if (bkKs != null) {
                     register_bitmap(idCardData.getMap());
                     bit = FileUtils.getBitmapFromPath(FileUtils.getAppSavePath() + "/" + bkKs.getKs_xp());
@@ -437,7 +437,7 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                                 ABLSynCallback.call(new ABLSynCallback.BackgroundCall() {
                                     @Override
                                     public Object callback() {
-                                        if (DbServices.getInstance(getBaseContext()).selectBKKS(ccno, bkKs.getKs_zjno()).getIsRZ().equals("1") || score[0] > 72) {
+                                        if (DbServices.getInstance(getBaseContext()).selectBKKS(kcmc, ccno, bkKs.getKs_zjno()).getIsRZ().equals("1") || score[0] > 72) {
                                             return Boolean.valueOf(true);
                                         } else {
                                             return Boolean.valueOf(false);

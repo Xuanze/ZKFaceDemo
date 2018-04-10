@@ -253,8 +253,8 @@ public class DbServices {
     }
 
 
-    public Bk_ks selectBKKS(String ccno, String zjno) {
-        return bk_ksDao.queryBuilder().where(Bk_ksDao.Properties.Ks_ccno.eq(ccno)).where(Bk_ksDao.Properties.Ks_zjno.eq(zjno)).build().unique();
+    public Bk_ks selectBKKS(String kcmc,String ccno, String zjno) {
+        return bk_ksDao.queryBuilder().where(Bk_ksDao.Properties.Ks_kcmc.eq(kcmc)).where(Bk_ksDao.Properties.Ks_ccno.eq(ccno)).where(Bk_ksDao.Properties.Ks_zjno.eq(zjno)).build().unique();
     }
 
     public List<Bk_ks_temp> selectDOWNBKKS(String kcno, String ccno) {
