@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Environment;
@@ -58,7 +59,7 @@ public abstract class BaseActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         baseReceiver = new BaseReceiver();
-        soundPool = new SoundPool(12, 0, 5);
+        soundPool = new SoundPool(12, AudioManager.STREAM_MUSIC, 0);
         //通过load方法加载指定音频流，并将返回的音频ID放入musicId中
         musicId.put(1, soundPool.load(this, R.raw.beep, 1));
         musicId.put(2, soundPool.load(this, R.raw.identify_face, 1));
