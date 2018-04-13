@@ -18,7 +18,6 @@ import com.zhongruan.android.zkfacedemo.db.Sfrz_rzztDao;
 import com.zhongruan.android.zkfacedemo.db.Sn_numberDao;
 import com.zhongruan.android.zkfacedemo.dialog.HintDialog;
 import com.zhongruan.android.zkfacedemo.utils.APPUtil;
-import com.zhongruan.android.zkfacedemo.utils.LogUtil;
 import com.zhongruan.android.zkfacedemo.utils.Utils;
 
 
@@ -33,10 +32,13 @@ public class WelcomeActivity extends BaseActivity {
         loadingImageView = findViewById(R.id.loadingImageView);
         idTvLoadingmsg = findViewById(R.id.id_tv_loadingmsg);
         ((AnimationDrawable) loadingImageView.getBackground()).start();
-        long time = System.currentTimeMillis();
-        startIDCardReader();
-        setParameter();
-        LogUtil.i("时间：" + (System.currentTimeMillis() - time));
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                startIDCardReader();
+                setParameter();
+            }
+        });
     }
 
     @Override

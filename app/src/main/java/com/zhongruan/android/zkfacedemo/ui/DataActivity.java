@@ -29,6 +29,7 @@ import com.zhongruan.android.zkfacedemo.db.Ks_kdDao;
 import com.zhongruan.android.zkfacedemo.db.Ks_kmDao;
 import com.zhongruan.android.zkfacedemo.db.Kstz_zwDao;
 import com.zhongruan.android.zkfacedemo.db.entity.Bk_ks_cjxx;
+import com.zhongruan.android.zkfacedemo.db.entity.Bk_ks_temp;
 import com.zhongruan.android.zkfacedemo.db.entity.Ks_kc;
 import com.zhongruan.android.zkfacedemo.db.entity.Sfrz_rzjg;
 import com.zhongruan.android.zkfacedemo.db.entity.Sfrz_rzjl;
@@ -58,7 +59,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import rx.android.BuildConfig;
 
@@ -821,11 +824,9 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                                 titleData.setText("数据管理");
                                 LogUtil.i(selectKcAdapter.getChosenKcList().size());
                                 if (selectKcAdapter.getChosenKcList().size() > 0) {
-
                                     if (kc.getKc_name().equals("全部考场")) {
                                         MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("UPDATE " + Ks_kcDao.TABLENAME + " SET  kc_extract = 1");
                                     } else {
-//                                        ConfigApplication.getApplication().setKCStr(kc.getKc_name());
                                         DbServices.getInstance(getBaseContext()).saveKsKc(kc.getKc_name());
                                     }
                                     select_kc_rl.setVisibility(View.GONE);
