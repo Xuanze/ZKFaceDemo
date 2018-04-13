@@ -26,6 +26,7 @@ import com.zhongruan.android.zkfacedemo.dialog.HintDialog2;
 import com.zhongruan.android.zkfacedemo.utils.ABLSynCallback;
 import com.zhongruan.android.zkfacedemo.utils.DateUtil;
 import com.zhongruan.android.zkfacedemo.utils.LogUtil;
+import com.zhongruan.android.zkfacedemo.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,19 +102,20 @@ public class SelectKcCcActivity extends BaseActivity implements View.OnClickList
         mGvContent.setNumColumns(4);
         mTvEmpty.setVisibility(View.VISIBLE);
         mTvSelectkc.setVisibility(View.GONE);
-
         Ks_kc ks_kc = new Ks_kc();
         ks_kc.setKc_no("全部考场");
         ks_kc.setKc_name("全部考场");
         ks_kc.setKc_extract("0");
         ksKcList.add(ks_kc);
         ksKcList.addAll(DbServices.getInstance(SelectKcCcActivity.this).loadAllkc());
-
         selectCcAdapter = new SelectCcAdapter(SelectKcCcActivity.this, ksCcList);
         mGvContent.setAdapter(selectCcAdapter);
-
         Intent getIntent = getIntent();
-        DbServices.getInstance(getBaseContext()).saveKsKc(getIntent.getStringExtra("kcmc"));
+        if (Utils.stringIsEmpty(getIntent.getStringExtra("kcmc"))) {
+            MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("UPDATE " + Ks_kcDao.TABLENAME + " SET  kc_extract = 1");
+        } else {
+            DbServices.getInstance(getBaseContext()).saveKsKc(getIntent.getStringExtra("kcmc"));
+        }
         selectKcAdapter = new SelectKcAdapter(SelectKcCcActivity.this, ksKcList);
         mGvContent.setAdapter(selectKcAdapter);
         mGvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -200,7 +202,7 @@ public class SelectKcCcActivity extends BaseActivity implements View.OnClickList
                                     showProgressDialog(SelectKcCcActivity.this, "正在提取所选场次数据完成", false, 100);
                                     dismissProgressDialog();
                                     if (DbServices.getInstance(getBaseContext()).selectKC().size() > 1) {
-                                        new HintDialog(SelectKcCcActivity.this, R.style.dialog, "提取考生完成，共有" + DbServices.getInstance(getBaseContext()).queryBKKSLists( cc.getCc_name()).size() + "个考生", new HintDialog.OnCloseListener() {
+                                        new HintDialog(SelectKcCcActivity.this, R.style.dialog, "提取考生完成，共有" + DbServices.getInstance(getBaseContext()).queryBKKSLists(cc.getCc_name()).size() + "个考生", new HintDialog.OnCloseListener() {
                                             @Override
                                             public void onClick(Dialog dialog, boolean confirm) {
                                                 if (confirm) {
@@ -225,7 +227,6 @@ public class SelectKcCcActivity extends BaseActivity implements View.OnClickList
 
 
                                     }
-
 
 
                                 } else {

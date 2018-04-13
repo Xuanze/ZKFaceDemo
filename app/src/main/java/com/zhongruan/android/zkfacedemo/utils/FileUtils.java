@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -290,7 +291,6 @@ public class FileUtils {
         return flag;
     }
 
-
     /**
      * 根据文件路径拷贝文件
      *
@@ -301,7 +301,6 @@ public class FileUtils {
         LogUtil.i("copyFileToUSB", tempFolder.getPath().toString());
         File[] files;
         String usbPath;
-
         if (tempFolder.length() == 0) {
             tempFolder.delete();
             return BuildConfig.VERSION_NAME;
@@ -324,9 +323,7 @@ public class FileUtils {
                     newfile.createNewFile();
                 }
             }
-
             LogUtil.i("copyFileToUSB", newfile.getPath().toString());
-
             InputStream inStream = new FileInputStream(tempFolder);
             FileOutputStream fs = new FileOutputStream(newfile);
             byte[] buffer = new byte[1024];
@@ -349,7 +346,6 @@ public class FileUtils {
             return BuildConfig.VERSION_NAME;
         }
     }
-
 
     // 将字符串写入到文本文件中
     public static void writeTxtToFile(String strcontent, String filePath, String fileName) {
@@ -403,6 +399,31 @@ public class FileUtils {
         }
     }
 
+    public static String getName(String name) {
+        File file = Environment.getExternalStorageDirectory();
+        if (file != null) {
+            File[] files = file.listFiles(new FileNameSelector(name));
+            return files[0].getName();
+        }
+        return "";
+    }
+
+    /**
+     * 后缀名过滤器
+     *
+     * @author ZLQ
+     */
+    public static class FileNameSelector implements FilenameFilter {
+        String extension = ".";
+
+        public FileNameSelector(String fileExtensionNoDot) {
+            extension += fileExtensionNoDot;
+        }
+
+        public boolean accept(File dir, String name) {
+            return name.endsWith(extension);
+        }
+    }
 
     /**
      * 删除单个文件

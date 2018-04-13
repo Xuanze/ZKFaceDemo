@@ -21,6 +21,7 @@ import com.zhongruan.android.zkfacedemo.R;
 import com.zhongruan.android.zkfacedemo.dialog.HintDialog;
 import com.zhongruan.android.zkfacedemo.idcardengine.IDCardData;
 import com.zhongruan.android.zkfacedemo.utils.CommonUtil;
+import com.zhongruan.android.zkfacedemo.utils.FileUtils;
 import com.zhongruan.android.zkfacedemo.utils.LogUtil;
 import com.zkteco.android.biometric.ZKLiveFaceService;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
@@ -250,7 +251,7 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     public void setParameter() {
-        File file = new File(Environment.getExternalStorageDirectory(), "zkliveface.lic");
+        File file = new File(Environment.getExternalStorageDirectory(), FileUtils.getName("lic") );
         byte[] buffer = new byte[8192];
         int len = 0;
         try {
@@ -268,6 +269,8 @@ public abstract class BaseActivity extends FragmentActivity {
             Toast.makeText(getApplicationContext(), "设置参数失败" + retCode, Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
     private void getInit() {
         long[] retContext = new long[1];

@@ -214,7 +214,12 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
                         @Override
                         public void onClick(Dialog dialog, boolean confirm) {
                             if (confirm) {
-                                String kcmc = DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_name();
+                                String kcmc = "";
+                                if (DbServices.getInstance(getBaseContext()).selectKC().size() > 1) {
+                                    kcmc = "";
+                                } else {
+                                    kcmc = DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_name();
+                                }
                                 MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("UPDATE " + Ks_kcDao.TABLENAME + " SET  kc_extract = 0");
                                 MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("UPDATE " + Ks_ccDao.TABLENAME + " SET  cc_extract = 0");
                                 dialog.dismiss();

@@ -423,6 +423,7 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                 analysis(data);
             }
             if (is) {
+                soundPool.play(musicId.get(3), 1, 1, 0, 0, 1);
                 is = false;
                 btn_photo.setEnabled(true);
                 contrastOption = false;
@@ -613,11 +614,9 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                     mKsResult.setTextColor(getResources().getColor(R.color.green));
                     break;
                 case 2:
-                    soundPool.play(musicId.get(3), 1, 1, 0, 0, 1);
                     mKsResult.setText("人脸比对不通过");
                     mKsResult.setTextColor(getResources().getColor(R.color.collect_yellow));
                     break;
-
                 case 3:
                     faceView.clearFaces();
                     break;
