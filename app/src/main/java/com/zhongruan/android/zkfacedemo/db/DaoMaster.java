@@ -30,7 +30,6 @@ public class DaoMaster extends AbstractDaoMaster {
         Ks_kcDao.createTable(db, ifNotExists);
         Ks_kdDao.createTable(db, ifNotExists);
         Ks_kmDao.createTable(db, ifNotExists);
-        Rz_ks_zwDao.createTable(db, ifNotExists);
         Sb_ipDao.createTable(db, ifNotExists);
         Sfrz_rzfsDao.createTable(db, ifNotExists);
         Sfrz_rzjgDao.createTable(db, ifNotExists);
@@ -50,7 +49,6 @@ public class DaoMaster extends AbstractDaoMaster {
         Ks_kcDao.dropTable(db, ifExists);
         Ks_kdDao.dropTable(db, ifExists);
         Ks_kmDao.dropTable(db, ifExists);
-        Rz_ks_zwDao.dropTable(db, ifExists);
         Sb_ipDao.dropTable(db, ifExists);
         Sfrz_rzfsDao.dropTable(db, ifExists);
         Sfrz_rzjgDao.dropTable(db, ifExists);
@@ -84,7 +82,6 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(Ks_kcDao.class);
         registerDaoClass(Ks_kdDao.class);
         registerDaoClass(Ks_kmDao.class);
-        registerDaoClass(Rz_ks_zwDao.class);
         registerDaoClass(Sb_ipDao.class);
         registerDaoClass(Sfrz_rzfsDao.class);
         registerDaoClass(Sfrz_rzjgDao.class);

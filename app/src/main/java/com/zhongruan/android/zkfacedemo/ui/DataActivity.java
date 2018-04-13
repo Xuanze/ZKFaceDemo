@@ -29,7 +29,6 @@ import com.zhongruan.android.zkfacedemo.db.Ks_kdDao;
 import com.zhongruan.android.zkfacedemo.db.Ks_kmDao;
 import com.zhongruan.android.zkfacedemo.db.Kstz_zwDao;
 import com.zhongruan.android.zkfacedemo.db.entity.Bk_ks_cjxx;
-import com.zhongruan.android.zkfacedemo.db.entity.Bk_ks_temp;
 import com.zhongruan.android.zkfacedemo.db.entity.Ks_kc;
 import com.zhongruan.android.zkfacedemo.db.entity.Sfrz_rzjg;
 import com.zhongruan.android.zkfacedemo.db.entity.Sfrz_rzjl;
@@ -383,7 +382,7 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                             if (Utils.checkUSBInserted()) {
                                 List<Sfrz_rzjl> listRzjl = DbServices.getInstance(DataActivity.this).loadAllrzjl();
                                 List<Sfrz_rzjg> listRzjg = DbServices.getInstance(DataActivity.this).loadAllrzjg();
-                                List<Bk_ks_temp> bkKsTempList = DbServices.getInstance(DataActivity.this).selectDOWNBKKS(ConfigApplication.getApplication().getKCStr(), ConfigApplication.getApplication().getCCStr());
+//                                List<Bk_ks_temp> bkKsTempList = DbServices.getInstance(DataActivity.this).selectDOWNBKKS(ConfigApplication.getApplication().getKCStr(), ConfigApplication.getApplication().getCCStr());
                                 if (listRzjl.size() > 0 && listRzjg.size() > 0) {
                                     showProgressDialog(DataActivity.this, "正在导出数据库数据...", false, 100);
                                     LogUtil.i("导出认证数据包到U盘", "正在导出数据库数据...");
@@ -395,9 +394,9 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                                         for (int i = 0; i < listRzjg.size(); i++) {
                                             FileUtils.writeTxtToFile(listRzjg.get(i).toString(), getAppSavePath() + "/ExportData/" + DbServices.getInstance(DataActivity.this).loadAllkd().get(0).getKd_no() + "_" + DbServices.getInstance(DataActivity.this).loadAllkd().get(0).getKd_name() + "_/", "sfrz_rzjg.txt");
                                         }
-                                        for (int i = 0; i < bkKsTempList.size(); i++) {
-                                            FileUtils.writeTxtToFile(bkKsTempList.get(i).toString(), getAppSavePath() + "/ExportData/" + DbServices.getInstance(DataActivity.this).loadAllkd().get(0).getKd_no() + "_" + DbServices.getInstance(DataActivity.this).loadAllkd().get(0).getKd_name() + "_/", "bk_ks.txt");
-                                        }
+//                                        for (int i = 0; i < bkKsTempList.size(); i++) {
+//                                            FileUtils.writeTxtToFile(bkKsTempList.get(i).toString(), getAppSavePath() + "/ExportData/" + DbServices.getInstance(DataActivity.this).loadAllkd().get(0).getKd_no() + "_" + DbServices.getInstance(DataActivity.this).loadAllkd().get(0).getKd_name() + "_/", "bk_ks.txt");
+//                                        }
                                         if (FileUtils.copyFolder(getAppSavePath() + "/sfrz_rzjl/", getAppSavePath() + "/ExportData/" + DbServices.getInstance(DataActivity.this).loadAllkd().get(0).getKd_no() + "_" + DbServices.getInstance(DataActivity.this).loadAllkd().get(0).getKd_name() + "_/sfrz_rzjl/")) {
                                             File file1 = new File(getAppSavePath() + "/ExportData/" + DbServices.getInstance(DataActivity.this).loadAllkd().get(0).getKd_no() + "_" + DbServices.getInstance(DataActivity.this).loadAllkd().get(0).getKd_name() + "_/");
                                             zipFile = new File(getAppSavePath() + "/ExportData/" + DbServices.getInstance(DataActivity.this).loadAllkd().get(0).getKd_no() + "_" + DbServices.getInstance(DataActivity.this).loadAllkd().get(0).getKd_name() + "_" + DateUtil.getNowTime2());
@@ -610,7 +609,6 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
             public Object callback() {
                 DbServices.getInstance(DataActivity.this).deleteAlltemp();
                 DbServices.getInstance(DataActivity.this).deleteAllxp();
-                DbServices.getInstance(DataActivity.this).deleteAllrzks();
                 DbServices.getInstance(DataActivity.this).deleteAllzw();
                 DbServices.getInstance(DataActivity.this).deleteAllcc();
                 DbServices.getInstance(DataActivity.this).deleteAllkc();
@@ -783,6 +781,11 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                     MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("INSERT INTO " + Ks_kmDao.TABLENAME + " (km_no, km_name) " + " select distinct kmno,kmmc from " + Bk_ks_tempDao.TABLENAME);
                     MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("INSERT INTO " + Ks_kcDao.TABLENAME + " (kc_no, kc_name,kc_extract) " + " select distinct kcno,kcmc,'0' from " + Bk_ks_tempDao.TABLENAME);
                     MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("INSERT INTO " + Ks_kdDao.TABLENAME + " (kd_no, kd_name) " + " select distinct kdno,kdmc from " + Bk_ks_tempDao.TABLENAME);
+                    Ks_kc ks_kc = new Ks_kc();
+                    ks_kc.setKc_no("全部考场");
+                    ks_kc.setKc_name("全部考场");
+                    ks_kc.setKc_extract("0");
+                    ksKcList.add(ks_kc);
                     ksKcList.addAll(DbServices.getInstance(DataActivity.this).loadAllkc());
                     return Boolean.valueOf(true);
                 } else {
@@ -802,9 +805,7 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                         titleData.setText("选择考场");
                         tv_empty.setVisibility(View.VISIBLE);
                         tv_selectkc.setVisibility(View.GONE);
-                        for (int i = 0; i < ksKcList.size(); i++) {
-                            LogUtil.i(ksKcList.get(i).getKc_name());
-                        }
+
                         selectKcAdapter = new SelectKcAdapter(DataActivity.this, ksKcList);
                         gridView.setAdapter(selectKcAdapter);
                         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -820,8 +821,13 @@ public class DataActivity extends BaseActivity implements View.OnClickListener {
                                 titleData.setText("数据管理");
                                 LogUtil.i(selectKcAdapter.getChosenKcList().size());
                                 if (selectKcAdapter.getChosenKcList().size() > 0) {
-                                    ConfigApplication.getApplication().setKCStr(kc.getKc_name());
-                                    DbServices.getInstance(getBaseContext()).saveKsKc(kc.getKc_name());
+
+                                    if (kc.getKc_name().equals("全部考场")) {
+                                        MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("UPDATE " + Ks_kcDao.TABLENAME + " SET  kc_extract = 1");
+                                    } else {
+//                                        ConfigApplication.getApplication().setKCStr(kc.getKc_name());
+                                        DbServices.getInstance(getBaseContext()).saveKsKc(kc.getKc_name());
+                                    }
                                     select_kc_rl.setVisibility(View.GONE);
                                     data_ll.setVisibility(View.VISIBLE);
                                     ShowHintDialog(DataActivity.this, "成功导入" + number + "位考生的编排数据", isUSB ? "U盘导入数据" : "网络导入数据", R.drawable.img_base_check, "知道了", false);

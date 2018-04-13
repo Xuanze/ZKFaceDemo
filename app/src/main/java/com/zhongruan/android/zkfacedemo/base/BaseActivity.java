@@ -49,11 +49,21 @@ public abstract class BaseActivity extends FragmentActivity {
     public boolean bopen = false;
     public long context;
 
+    public SoundPool soundPool;
+    //定义一个HashMap用于存放音频流的ID
+    public HashMap<Integer, Integer> musicId = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         baseReceiver = new BaseReceiver();
+        soundPool = new SoundPool(12, 0, 5);
+        //通过load方法加载指定音频流，并将返回的音频ID放入musicId中
+        musicId.put(1, soundPool.load(this, R.raw.beep, 1));
+        musicId.put(2, soundPool.load(this, R.raw.identify_face, 1));
+        musicId.put(3, soundPool.load(this, R.raw.identify_face_failed, 1));
+        musicId.put(4, soundPool.load(this, R.raw.identify_succeeded, 1));
         setContentView();
         initViews();
         initListeners();
@@ -238,22 +248,6 @@ public abstract class BaseActivity extends FragmentActivity {
         }
     }
 
-    public void playBeep() {
-        SoundPool soundPool = new SoundPool(10, 3, 100);
-        soundPool.load(this, R.raw.beep, 1);
-        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-            @Override
-            public void onLoadComplete(SoundPool soundPool, int i, int i2) {
-                soundPool.play(1,  //声音id
-                        1, //左声道
-                        1, //右声道
-                        0, //优先级
-                        0, // 0表示不循环，-1表示循环播放
-                        1);//播放比率，0.5~2，一般为1
-            }
-        });
-    }
-
     public void setParameter() {
         File file = new File(Environment.getExternalStorageDirectory(), "zkliveface.lic");
         byte[] buffer = new byte[8192];
@@ -273,7 +267,6 @@ public abstract class BaseActivity extends FragmentActivity {
             Toast.makeText(getApplicationContext(), "设置参数失败" + retCode, Toast.LENGTH_SHORT).show();
         }
     }
-
 
     private void getInit() {
         long[] retContext = new long[1];

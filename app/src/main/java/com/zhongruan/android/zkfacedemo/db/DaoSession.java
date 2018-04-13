@@ -17,7 +17,6 @@ import com.zhongruan.android.zkfacedemo.db.entity.Ks_cc;
 import com.zhongruan.android.zkfacedemo.db.entity.Ks_kc;
 import com.zhongruan.android.zkfacedemo.db.entity.Ks_kd;
 import com.zhongruan.android.zkfacedemo.db.entity.Ks_km;
-import com.zhongruan.android.zkfacedemo.db.entity.Rz_ks_zw;
 import com.zhongruan.android.zkfacedemo.db.entity.Sb_ip;
 import com.zhongruan.android.zkfacedemo.db.entity.Sfrz_rzfs;
 import com.zhongruan.android.zkfacedemo.db.entity.Sfrz_rzjg;
@@ -34,7 +33,6 @@ import com.zhongruan.android.zkfacedemo.db.Ks_ccDao;
 import com.zhongruan.android.zkfacedemo.db.Ks_kcDao;
 import com.zhongruan.android.zkfacedemo.db.Ks_kdDao;
 import com.zhongruan.android.zkfacedemo.db.Ks_kmDao;
-import com.zhongruan.android.zkfacedemo.db.Rz_ks_zwDao;
 import com.zhongruan.android.zkfacedemo.db.Sb_ipDao;
 import com.zhongruan.android.zkfacedemo.db.Sfrz_rzfsDao;
 import com.zhongruan.android.zkfacedemo.db.Sfrz_rzjgDao;
@@ -60,7 +58,6 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig ks_kcDaoConfig;
     private final DaoConfig ks_kdDaoConfig;
     private final DaoConfig ks_kmDaoConfig;
-    private final DaoConfig rz_ks_zwDaoConfig;
     private final DaoConfig sb_ipDaoConfig;
     private final DaoConfig sfrz_rzfsDaoConfig;
     private final DaoConfig sfrz_rzjgDaoConfig;
@@ -77,7 +74,6 @@ public class DaoSession extends AbstractDaoSession {
     private final Ks_kcDao ks_kcDao;
     private final Ks_kdDao ks_kdDao;
     private final Ks_kmDao ks_kmDao;
-    private final Rz_ks_zwDao rz_ks_zwDao;
     private final Sb_ipDao sb_ipDao;
     private final Sfrz_rzfsDao sfrz_rzfsDao;
     private final Sfrz_rzjgDao sfrz_rzjgDao;
@@ -116,9 +112,6 @@ public class DaoSession extends AbstractDaoSession {
         ks_kmDaoConfig = daoConfigMap.get(Ks_kmDao.class).clone();
         ks_kmDaoConfig.initIdentityScope(type);
 
-        rz_ks_zwDaoConfig = daoConfigMap.get(Rz_ks_zwDao.class).clone();
-        rz_ks_zwDaoConfig.initIdentityScope(type);
-
         sb_ipDaoConfig = daoConfigMap.get(Sb_ipDao.class).clone();
         sb_ipDaoConfig.initIdentityScope(type);
 
@@ -146,7 +139,6 @@ public class DaoSession extends AbstractDaoSession {
         ks_kcDao = new Ks_kcDao(ks_kcDaoConfig, this);
         ks_kdDao = new Ks_kdDao(ks_kdDaoConfig, this);
         ks_kmDao = new Ks_kmDao(ks_kmDaoConfig, this);
-        rz_ks_zwDao = new Rz_ks_zwDao(rz_ks_zwDaoConfig, this);
         sb_ipDao = new Sb_ipDao(sb_ipDaoConfig, this);
         sfrz_rzfsDao = new Sfrz_rzfsDao(sfrz_rzfsDaoConfig, this);
         sfrz_rzjgDao = new Sfrz_rzjgDao(sfrz_rzjgDaoConfig, this);
@@ -163,7 +155,6 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(Ks_kc.class, ks_kcDao);
         registerDao(Ks_kd.class, ks_kdDao);
         registerDao(Ks_km.class, ks_kmDao);
-        registerDao(Rz_ks_zw.class, rz_ks_zwDao);
         registerDao(Sb_ip.class, sb_ipDao);
         registerDao(Sfrz_rzfs.class, sfrz_rzfsDao);
         registerDao(Sfrz_rzjg.class, sfrz_rzjgDao);
@@ -182,7 +173,6 @@ public class DaoSession extends AbstractDaoSession {
         ks_kcDaoConfig.clearIdentityScope();
         ks_kdDaoConfig.clearIdentityScope();
         ks_kmDaoConfig.clearIdentityScope();
-        rz_ks_zwDaoConfig.clearIdentityScope();
         sb_ipDaoConfig.clearIdentityScope();
         sfrz_rzfsDaoConfig.clearIdentityScope();
         sfrz_rzjgDaoConfig.clearIdentityScope();
@@ -225,10 +215,6 @@ public class DaoSession extends AbstractDaoSession {
 
     public Ks_kmDao getKs_kmDao() {
         return ks_kmDao;
-    }
-
-    public Rz_ks_zwDao getRz_ks_zwDao() {
-        return rz_ks_zwDao;
     }
 
     public Sb_ipDao getSb_ipDao() {

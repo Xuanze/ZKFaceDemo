@@ -78,6 +78,7 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
     private String SN = DbServices.getInstance(getBaseContext()).loadAllSN().get(0).getSn();
     private Camera.Size previewSize;
     private int x, y;
+    private int isRzSize;
 
     @Override
     public void setContentView() {
@@ -122,7 +123,13 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
         _surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         ccno = DbServices.getInstance(getBaseContext()).selectCC().get(0).getCc_no();
         ccmc = DbServices.getInstance(getBaseContext()).selectCC().get(0).getCc_name();
-        kcmc = DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_name();
+
+        if (DbServices.getInstance(getBaseContext()).selectKC().size() > 1) {
+            kcmc = "全部考场";
+        } else {
+            kcmc = DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_name();
+        }
+
         kmmc = DbServices.getInstance(getBaseContext()).selectCC().get(0).getKm_name();
         kmno = DbServices.getInstance(getBaseContext()).selectCC().get(0).getKm_no();
         kdno = DbServices.getInstance(getBaseContext()).loadAllkd().get(0).getKd_no();
@@ -170,7 +177,11 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                             dialog.dismiss();
                             IDCard idCard = new IDCard();
                             if (idCard.validate_effective(password) == password) {
-                                bkKs = DbServices.getInstance(getBaseContext()).selectBKKS(kcmc, ccno, password);
+                                if (DbServices.getInstance(getBaseContext()).selectKC().size() > 1) {
+                                    bkKs = DbServices.getInstance(getBaseContext()).selectBKKSs(ccno, password);
+                                } else {
+                                    bkKs = DbServices.getInstance(getBaseContext()).selectBKKS(kcmc, ccno, password);
+                                }
                                 if (bkKs != null) {
                                     bit = FileUtils.getBitmapFromPath(FileUtils.getAppSavePath() + "/" + bkKs.getKs_xp());
                                     register_bitmap(bit);
@@ -207,8 +218,12 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
             idCardData = OnBnRead();
             bit = null;
             if (idCardData != null) {
-                playBeep();
-                bkKs = DbServices.getInstance(getBaseContext()).selectBKKS(kcmc, ccno, idCardData.getSfzh());
+                soundPool.play(musicId.get(1), 1, 1, 0, 0, 1);
+                if (DbServices.getInstance(getBaseContext()).selectKC().size() > 1) {
+                    bkKs = DbServices.getInstance(getBaseContext()).selectBKKSs(ccno, idCardData.getSfzh());
+                } else {
+                    bkKs = DbServices.getInstance(getBaseContext()).selectBKKS(kcmc, ccno, idCardData.getSfzh());
+                }
                 if (bkKs != null) {
                     register_bitmap(idCardData.getMap());
                     bit = FileUtils.getBitmapFromPath(FileUtils.getAppSavePath() + "/" + bkKs.getKs_xp());
@@ -299,6 +314,7 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
     };
 
     private void KsPZ() {
+        soundPool.play(musicId.get(2), 1, 1, 0, 0, 1);
         include_idcard.setVisibility(View.GONE);
         mTvTip.setText("请看摄像头");
         mLlChangeCc.setEnabled(false);
@@ -334,9 +350,15 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
         mLlChangeCc.setEnabled(true);
         btn_photo.setEnabled(false);
         include_idcard.setVisibility(View.VISIBLE);
-        bk_ks = DbServices.getInstance(getBaseContext()).queryBKKSList(kcmc, ccmc);
+
+        if (DbServices.getInstance(getBaseContext()).selectKC().size() > 1) {
+            bk_ks = DbServices.getInstance(getBaseContext()).queryBKKSLists(ccmc);
+            isRzSize = DbServices.getInstance(getBaseContext()).queryBkKsIsTGs(ccmc, "1");
+        } else {
+            bk_ks = DbServices.getInstance(getBaseContext()).queryBKKSList(kcmc, ccmc);
+            isRzSize = DbServices.getInstance(getBaseContext()).queryBkKsIsTG(kcmc, ccmc, "1");
+        }
         mTvCountTotal.setText(bk_ks.size() + "");
-        int isRzSize = DbServices.getInstance(getBaseContext()).queryBkKsIsTG(kcmc, ccmc, "1");
         mTvCountVerified.setText(isRzSize + "");
         mTvCountUnverified.setText(bk_ks.size() - isRzSize + "");
     }
@@ -437,10 +459,18 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                                 ABLSynCallback.call(new ABLSynCallback.BackgroundCall() {
                                     @Override
                                     public Object callback() {
-                                        if (DbServices.getInstance(getBaseContext()).selectBKKS(kcmc, ccno, bkKs.getKs_zjno()).getIsRZ().equals("1") || score[0] > 72) {
-                                            return Boolean.valueOf(true);
+                                        if (DbServices.getInstance(getBaseContext()).selectKC().size() > 1) {
+                                            if (DbServices.getInstance(getBaseContext()).selectBKKSs(ccno, bkKs.getKs_zjno()).getIsRZ().equals("1") || score[0] > 72) {
+                                                return Boolean.valueOf(true);
+                                            } else {
+                                                return Boolean.valueOf(false);
+                                            }
                                         } else {
-                                            return Boolean.valueOf(false);
+                                            if (DbServices.getInstance(getBaseContext()).selectBKKS(kcmc, ccno, bkKs.getKs_zjno()).getIsRZ().equals("1") || score[0] > 72) {
+                                                return Boolean.valueOf(true);
+                                            } else {
+                                                return Boolean.valueOf(false);
+                                            }
                                         }
                                     }
                                 }, new ABLSynCallback.ForegroundCall() {
@@ -460,7 +490,12 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                                             FileUtils.saveBitmap(bitmap, "sfrz_rzjl/kstz_a_pz/", bkKs.getKs_ksno() + "_" + timezp);
                                             DbServices.getInstance(getBaseContext()).saveRzjl("8006", bkKs.getKs_ksno(), kmno, kdno, bkKs.getKs_kcno(), bkKs.getKs_zwh(), SN, "0", DateUtil.getNowTime(), "", "sfrz_rzjl/kstz_a_pz/" + bkKs.getKs_ksno() + "_" + timezp + ".jpg", DbServices.getInstance(getBaseContext()).selectRzjg(bkKs.getKs_ksno()).toString(), "0");
                                         }
-                                        DbServices.getInstance(getBaseContext()).saveBkKs(kcmc, ccno, bkKs.getKs_zjno());
+
+                                        if (DbServices.getInstance(getBaseContext()).selectKC().size() > 1) {
+                                            DbServices.getInstance(getBaseContext()).saveBkKss(ccno, bkKs.getKs_zjno());
+                                        } else {
+                                            DbServices.getInstance(getBaseContext()).saveBkKs(kcmc, ccno, bkKs.getKs_zjno());
+                                        }
                                         isZwYz();
                                         KsList();
                                         handler.postDelayed(runnable02, 100);
@@ -526,7 +561,7 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
             int[] points = new int[8];
             int _ret = ZKLiveFaceService.getFaceRect(faceContext, points, 4);
             if (_ret == 0) {
-                playBeep();
+                soundPool.play(musicId.get(1), 1, 1, 0, 0, 1);
                 CS++;
                 LogUtil.i("人脸", "成功：" + _ret);
                 SendHandle(0, points);
@@ -573,10 +608,12 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                     break;
                 case 1:
                     fileOpiton = true;
+                    soundPool.play(musicId.get(4), 1, 1, 0, 0, 1);
                     mKsResult.setText("人脸比对通过");
                     mKsResult.setTextColor(getResources().getColor(R.color.green));
                     break;
                 case 2:
+                    soundPool.play(musicId.get(3), 1, 1, 0, 0, 1);
                     mKsResult.setText("人脸比对不通过");
                     mKsResult.setTextColor(getResources().getColor(R.color.collect_yellow));
                     break;
@@ -598,7 +635,6 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
 
     @Override
     protected void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
     }
 

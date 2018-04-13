@@ -19,8 +19,6 @@ import com.zhongruan.android.zkfacedemo.db.Bk_ksxpDao;
 import com.zhongruan.android.zkfacedemo.db.DbServices;
 import com.zhongruan.android.zkfacedemo.db.Ks_ccDao;
 import com.zhongruan.android.zkfacedemo.db.Ks_kcDao;
-import com.zhongruan.android.zkfacedemo.db.Kstz_zwDao;
-import com.zhongruan.android.zkfacedemo.db.Rz_ks_zwDao;
 import com.zhongruan.android.zkfacedemo.db.entity.Ks_cc;
 import com.zhongruan.android.zkfacedemo.db.entity.Ks_kc;
 import com.zhongruan.android.zkfacedemo.dialog.HintDialog;
@@ -103,12 +101,19 @@ public class SelectKcCcActivity extends BaseActivity implements View.OnClickList
         mGvContent.setNumColumns(4);
         mTvEmpty.setVisibility(View.VISIBLE);
         mTvSelectkc.setVisibility(View.GONE);
+
+        Ks_kc ks_kc = new Ks_kc();
+        ks_kc.setKc_no("全部考场");
+        ks_kc.setKc_name("全部考场");
+        ks_kc.setKc_extract("0");
+        ksKcList.add(ks_kc);
         ksKcList.addAll(DbServices.getInstance(SelectKcCcActivity.this).loadAllkc());
+
         selectCcAdapter = new SelectCcAdapter(SelectKcCcActivity.this, ksCcList);
         mGvContent.setAdapter(selectCcAdapter);
-        for (int i = 0; i < ksKcList.size(); i++) {
-            LogUtil.i(ksKcList.get(i).getKc_name());
-        }
+
+        Intent getIntent = getIntent();
+        DbServices.getInstance(getBaseContext()).saveKsKc(getIntent.getStringExtra("kcmc"));
         selectKcAdapter = new SelectKcAdapter(SelectKcCcActivity.this, ksKcList);
         mGvContent.setAdapter(selectKcAdapter);
         mGvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -123,8 +128,12 @@ public class SelectKcCcActivity extends BaseActivity implements View.OnClickList
             public void onClick(View view) {
                 LogUtil.i(selectKcAdapter.getChosenKcList().size());
                 if (selectKcAdapter.getChosenKcList().size() > 0) {
-                    MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("UPDATE " + Ks_kcDao.TABLENAME + " SET  kc_extract = 0");
-                    DbServices.getInstance(getBaseContext()).saveKsKc(kc.getKc_name());
+                    if (kc.getKc_name().equals("全部考场")) {
+                        MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("UPDATE " + Ks_kcDao.TABLENAME + " SET  kc_extract = 1");
+                    } else {
+                        MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("UPDATE " + Ks_kcDao.TABLENAME + " SET  kc_extract = 0");
+                        DbServices.getInstance(getBaseContext()).saveKsKc(kc.getKc_name());
+                    }
                     selectCC();
                 }
             }
@@ -163,18 +172,22 @@ public class SelectKcCcActivity extends BaseActivity implements View.OnClickList
                     }).setTitle("提示").setBackgroundResource(R.drawable.img_base_icon_question).setNegativeButton("重新选择场次").setPositiveButton("修改当前时间").show();
                 } else {
                     showProgressDialog(SelectKcCcActivity.this, "正在提取所选场次数据...", false, 100);
-                    DbServices.getInstance(getBaseContext()).deleteAllrzks();
                     if (selectCcAdapter.getChosenCcList().size() > 0) {
                         MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("UPDATE " + Ks_ccDao.TABLENAME + " SET  cc_extract = 0");
                         MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("UPDATE " + Ks_ccDao.TABLENAME + " SET  cc_extract = 1 WHERE cc_no = " + cc.getCc_no());
-                        MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("INSERT INTO " + Rz_ks_zwDao.TABLENAME + " (ks_ksno,ks_xm,ks_xb,ks_zjno,ks_zwh,ks_kcno,ks_kcmc,ks_xp,zw_bs,zw_feature) " + " select a.ksno,a.xm,a.xb,a.zjno,a.zw,a.kcno,a.kcmc,b.xp_pic,c.zw_position,c.zw_feature from " + Bk_ks_tempDao.TABLENAME + " as a," + Bk_ksxpDao.TABLENAME + " as b , " + Kstz_zwDao.TABLENAME + " as c where  (a.kcno = '" + DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_no() + "' AND a.ccno = '" + cc.getCc_no() + "'AND a.zjno=b.zjno  AND a.zjno=c.zjno) ");
-                        if (DbServices.getInstance(getBaseContext()).queryBKKSList(DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_name(), cc.getCc_name()).size() == 0) {
-                            MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("INSERT INTO " + Bk_ksDao.TABLENAME + " (ks_ksno,ks_xm,ks_xb,ks_zjno,ks_zwh,ks_ccno,ks_ccmc,ks_kcno,ks_kcmc,ks_xp,isRZ) " + " select a.ksno,a.xm,a.xb,a.zjno,a.zw,a.ccno,a.ccmc,a.kcno,a.kcmc,b.xp_pic,'0' from " + Bk_ks_tempDao.TABLENAME + " as a," + Bk_ksxpDao.TABLENAME + " as b where  (a.kcno = '" + DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_no() + "' AND a.ccno = '" + cc.getCc_no() + "'AND a.zjno=b.zjno)");
+
+                        if (DbServices.getInstance(getBaseContext()).selectKC().size() > 1) {
+                            DbServices.getInstance(SelectKcCcActivity.this).deleteAllbkks();
+                            MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("INSERT INTO " + Bk_ksDao.TABLENAME + " (ks_ksno,ks_xm,ks_xb,ks_zjno,ks_zwh,ks_ccno,ks_ccmc,ks_kcno,ks_kcmc,ks_xp,isRZ) " + " select a.ksno,a.xm,a.xb,a.zjno,a.zw,a.ccno,a.ccmc,a.kcno,a.kcmc,b.xp_pic,'0' from " + Bk_ks_tempDao.TABLENAME + " as a," + Bk_ksxpDao.TABLENAME + " as b where (a.ccno = '" + cc.getCc_no() + "'AND a.zjno=b.zjno)");
+                        } else {
+                            if (DbServices.getInstance(getBaseContext()).queryBKKSList(DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_name(), cc.getCc_name()).size() == 0) {
+                                MyApplication.getDaoInstant(getBaseContext()).getDatabase().execSQL("INSERT INTO " + Bk_ksDao.TABLENAME + " (ks_ksno,ks_xm,ks_xb,ks_zjno,ks_zwh,ks_ccno,ks_ccmc,ks_kcno,ks_kcmc,ks_xp,isRZ) " + " select a.ksno,a.xm,a.xb,a.zjno,a.zw,a.ccno,a.ccmc,a.kcno,a.kcmc,b.xp_pic,'0' from " + Bk_ks_tempDao.TABLENAME + " as a," + Bk_ksxpDao.TABLENAME + " as b where  (a.kcno = '" + DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_no() + "' AND a.ccno = '" + cc.getCc_no() + "'AND a.zjno=b.zjno)");
+                            }
                         }
                         ABLSynCallback.call(new ABLSynCallback.BackgroundCall() {
                             @Override
                             public Object callback() {
-                                if (DbServices.getInstance(getBaseContext()).loadAllrzkszw().size() > 0 && DbServices.getInstance(getBaseContext()).queryBKKSList(DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_name(), cc.getCc_name()).size() > 0) {
+                                if (DbServices.getInstance(getBaseContext()).queryBKKSList(DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_name(), cc.getCc_name()).size() > 0) {
                                     return Boolean.valueOf(true);
                                 } else {
                                     return Boolean.valueOf(false);
@@ -186,16 +199,35 @@ public class SelectKcCcActivity extends BaseActivity implements View.OnClickList
                                 if (((Boolean) obj).booleanValue()) {
                                     showProgressDialog(SelectKcCcActivity.this, "正在提取所选场次数据完成", false, 100);
                                     dismissProgressDialog();
-                                    new HintDialog(SelectKcCcActivity.this, R.style.dialog, "提取考生完成，共有" + DbServices.getInstance(getBaseContext()).queryBKKSList(DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_name(), cc.getCc_name()).size() + "个考生", new HintDialog.OnCloseListener() {
-                                        @Override
-                                        public void onClick(Dialog dialog, boolean confirm) {
-                                            if (confirm) {
-                                                dialog.dismiss();
-                                                startActivity(new Intent(SelectKcCcActivity.this, RZActivity.class));
-                                                finish();
+                                    if (DbServices.getInstance(getBaseContext()).selectKC().size() > 1) {
+                                        new HintDialog(SelectKcCcActivity.this, R.style.dialog, "提取考生完成，共有" + DbServices.getInstance(getBaseContext()).queryBKKSLists( cc.getCc_name()).size() + "个考生", new HintDialog.OnCloseListener() {
+                                            @Override
+                                            public void onClick(Dialog dialog, boolean confirm) {
+                                                if (confirm) {
+                                                    dialog.dismiss();
+                                                    startActivity(new Intent(SelectKcCcActivity.this, RZActivity.class));
+                                                    finish();
+                                                }
                                             }
-                                        }
-                                    }).setBackgroundResource(R.drawable.img_base_check).setNOVisibility(false).setLLButtonVisibility(true).setTitle("提示").setPositiveButton("知道了").show();
+                                        }).setBackgroundResource(R.drawable.img_base_check).setNOVisibility(false).setLLButtonVisibility(true).setTitle("提示").setPositiveButton("知道了").show();
+
+                                    } else {
+                                        new HintDialog(SelectKcCcActivity.this, R.style.dialog, "提取考生完成，共有" + DbServices.getInstance(getBaseContext()).queryBKKSList(DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_name(), cc.getCc_name()).size() + "个考生", new HintDialog.OnCloseListener() {
+                                            @Override
+                                            public void onClick(Dialog dialog, boolean confirm) {
+                                                if (confirm) {
+                                                    dialog.dismiss();
+                                                    startActivity(new Intent(SelectKcCcActivity.this, RZActivity.class));
+                                                    finish();
+                                                }
+                                            }
+                                        }).setBackgroundResource(R.drawable.img_base_check).setNOVisibility(false).setLLButtonVisibility(true).setTitle("提示").setPositiveButton("知道了").show();
+
+
+                                    }
+
+
+
                                 } else {
                                     ShowHintDialog(SelectKcCcActivity.this, "提取考生指纹失败，请重新选择场次", "提示", R.drawable.img_base_icon_error, "知道了", false);
                                 }
