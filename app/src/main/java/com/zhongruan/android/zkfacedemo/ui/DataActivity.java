@@ -29,7 +29,6 @@ import com.zhongruan.android.zkfacedemo.db.Ks_kdDao;
 import com.zhongruan.android.zkfacedemo.db.Ks_kmDao;
 import com.zhongruan.android.zkfacedemo.db.Kstz_zwDao;
 import com.zhongruan.android.zkfacedemo.db.entity.Bk_ks_cjxx;
-import com.zhongruan.android.zkfacedemo.db.entity.Bk_ks_temp;
 import com.zhongruan.android.zkfacedemo.db.entity.Ks_kc;
 import com.zhongruan.android.zkfacedemo.db.entity.Sfrz_rzjg;
 import com.zhongruan.android.zkfacedemo.db.entity.Sfrz_rzjl;
@@ -59,9 +58,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import rx.android.BuildConfig;
 
