@@ -29,20 +29,13 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_welcome);
-        loadingImageView = findViewById(R.id.loadingImageView);
-        idTvLoadingmsg = findViewById(R.id.id_tv_loadingmsg);
-        ((AnimationDrawable) loadingImageView.getBackground()).start();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                startIDCardReader();
-                setParameter();
-            }
-        });
     }
 
     @Override
     public void initViews() {
+        loadingImageView = findViewById(R.id.loadingImageView);
+        idTvLoadingmsg = findViewById(R.id.id_tv_loadingmsg);
+        ((AnimationDrawable) loadingImageView.getBackground()).start();
         audioManager = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
     }
@@ -131,6 +124,18 @@ public class WelcomeActivity extends BaseActivity {
                 }
             }).setBackgroundResource(R.drawable.img_base_icon_error).setNOVisibility(false).setLLButtonVisibility(true).setTitle("提示").setPositiveButton("知道了").show();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                startIDCardReader();
+                setParameter();
+            }
+        });
     }
 
     @Override

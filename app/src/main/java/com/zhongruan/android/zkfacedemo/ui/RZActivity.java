@@ -60,7 +60,7 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
     private Bitmap bitmap, bit;
     private boolean isRzSucceed;
     private String timeZP, kmno, kmmc, kcmc, kdno, ccmc, ccno;
-    private int CS = 0;
+    private int CS, photo = 0;
     private IDCardData idCardData;
     private Bk_ks bkKs;
     private static int faceID = 0;
@@ -68,17 +68,13 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
     private SurfaceView surfaceView;
     private Camera mCamera;
     private SurfaceHolder _surfaceHolder;
-    private boolean fileOpiton = false;
-    private boolean is = false;
-    private boolean contrastOption = false;
+    private boolean fileOpiton, is, contrastOption = false;
     private List<Bk_ks> bk_ks;
-    Message message = new Message();
-    private int photo = 0;
+    private Message message = new Message();
     private int[] score;
     private String SN = DbServices.getInstance(getBaseContext()).loadAllSN().get(0).getSn();
     private Camera.Size previewSize;
-    private int x, y;
-    private int isRzSize;
+    private int x, y, isRzSize;
 
     @Override
     public void setContentView() {
@@ -504,6 +500,7 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                                 });
                                 dialog.dismiss();
                             } else {
+                                soundPool.play(musicId.get(2), 1, 1, 0, 0, 1);
                                 CS = 0;
                                 btn_photo.setEnabled(false);
                                 contrastOption = true;
