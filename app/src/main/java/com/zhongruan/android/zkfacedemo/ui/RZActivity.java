@@ -119,13 +119,11 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
         _surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         ccno = DbServices.getInstance(getBaseContext()).selectCC().get(0).getCc_no();
         ccmc = DbServices.getInstance(getBaseContext()).selectCC().get(0).getCc_name();
-
         if (DbServices.getInstance(getBaseContext()).selectKC().size() > 1) {
             kcmc = "全部考场";
         } else {
             kcmc = DbServices.getInstance(getBaseContext()).selectKC().get(0).getKc_name();
         }
-
         kmmc = DbServices.getInstance(getBaseContext()).selectCC().get(0).getKm_name();
         kmno = DbServices.getInstance(getBaseContext()).selectCC().get(0).getKm_no();
         kdno = DbServices.getInstance(getBaseContext()).loadAllkd().get(0).getKd_no();
@@ -225,7 +223,6 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
                     bit = FileUtils.getBitmapFromPath(FileUtils.getAppSavePath() + "/" + bkKs.getKs_xp());
                     KsPZ();
                 } else {
-
                     ShowToast("未查找到" + idCardData.getSfzh() + "，请重试");
                     handler.postDelayed(runnable02, 100);// 间隔1秒
                 }
@@ -346,7 +343,6 @@ public class RZActivity extends BaseActivity implements View.OnClickListener, Su
         mLlChangeCc.setEnabled(true);
         btn_photo.setEnabled(false);
         include_idcard.setVisibility(View.VISIBLE);
-
         if (DbServices.getInstance(getBaseContext()).selectKC().size() > 1) {
             bk_ks = DbServices.getInstance(getBaseContext()).queryBKKSLists(ccmc);
             isRzSize = DbServices.getInstance(getBaseContext()).queryBkKsIsTGs(ccmc, "1");

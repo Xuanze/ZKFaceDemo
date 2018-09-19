@@ -38,10 +38,10 @@ public class WelcomeActivity extends BaseActivity {
         ((AnimationDrawable) loadingImageView.getBackground()).start();
         audioManager = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+        startIDCardReader();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                startIDCardReader();
                 setParameter();
             }
         });
@@ -136,7 +136,6 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     @Override
